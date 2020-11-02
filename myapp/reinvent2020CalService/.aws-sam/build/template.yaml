@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: reinvent2020CalService
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  CalculationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/calculation.Handler
+      Runtime: nodejs12.x
+      MemorySize: 128
+      Timeout: 100
+      Tracing: Active
+      Description: A Lambda function that returns a static string.
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /v2/{x}/{y}/{z}
+            Method: any
+            RestApiId:
+              Ref: CalculatorApi
+      CodeUri: CalculationFunction
+  CalculatorApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      TracingEnabled: true

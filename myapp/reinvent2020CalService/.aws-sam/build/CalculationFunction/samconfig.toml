@@ -1,0 +1,9 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "Calculator"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1h87t6zrie6kb"
+s3_prefix = "Calculator"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"

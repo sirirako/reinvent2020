@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "myapp:src/handlers/receiver.Handler (nodejs12.x)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "myapp/reinvent2020app",
+                "lambdaHandler": "src/handlers/receiver.Handler"
+            },
+            "lambda": {
+                "runtime": "nodejs12.x",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        }
+    ]
+}

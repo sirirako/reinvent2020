@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: reinvent2020app
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  ReceiverFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/receiver.Handler
+      Runtime: nodejs12.x
+      MemorySize: 128
+      Timeout: 100
+      Tracing: Active
+      Description: A Lambda function that returns a static string.
+      Policies:
+      - AWSLambdaBasicExecutionRole
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Enabled: true
+        Type: AllAtOnce
+        Role:
+          Fn::GetAtt:
+          - SAMDeployRole
+          - Arn
+      Events:
+        ReceiverAPI:
+          Type: Api
+          Properties:
+            Path: /put
+            Method: post
+            RestApiId:
+              Ref: ReceiverApi
+      CodeUri: ReceiverFunction
+  ReceiverApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      TracingEnabled: true
+  SAMDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codedeploy.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: /
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda
